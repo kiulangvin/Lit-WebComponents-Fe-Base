@@ -1,0 +1,63 @@
+:host {
+  display: inline-block;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: none;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: background-color .2s ease, opacity .2s ease;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 类型 */
+button.primary {
+  background: #3b82f6;
+  color: white;
+}
+button.primary:hover {
+  background: #2563eb;
+}
+
+button.success {
+  background: #22c55e;
+  color: white;
+}
+button.success:hover {
+  background: #16a34a;
+}
+
+button.danger {
+  background: #ef4444;
+  color: white;
+}
+button.danger:hover {
+  background: #dc2626;
+}
+
+/* 尺寸 */
+button.small {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+button.medium {
+  padding: 6px 14px;
+  font-size: 14px;
+}
+button.large {
+  padding: 10px 18px;
+  font-size: 16px;
+}

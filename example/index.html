@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Lit Web Components Playground</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 260px;
+      border-right: 1px solid #ddd;
+      padding: 20px;
+      box-sizing: border-box;
+      background: #fafafa;
+      overflow-y: auto;
+    }
+
+    /* sidebar 顶部标题区域 */
+    .sidebar-title {
+      display: flex;
+      /* 方便 logo + 文本横向排列 */
+      align-items: center;
+      padding: 16px 20px;
+      background-color: #111;
+      /* 黑色系背景 */
+      color: #fff;
+      /* 白色文字 */
+      /* 白色文字 */
+      font-size: 18px;
+      font-weight: 700;
+      margin: -20px -20px 20px -20px;
+      /* 把 padding 的外边距抵消，铺满 sidebar 宽度 */
+      border-bottom: 1px solid #2563eb;
+      /* 底部分割线 */
+      box-sizing: border-box;
+    }
+
+    /* logo 样式，如果未来加 logo */
+    .sidebar-title .logo {
+      width: 28px;
+      height: 28px;
+      margin-right: 10px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      border-radius: 4px;
+    }
+
+    /* 标题文字 */
+    .sidebar-title .title-text {
+      flex: 1;
+    }
+
+
+    .group-title {
+      margin: 16px 0 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #555;
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .group-title:hover {
+      color: #000;
+    }
+
+    .group-items {
+      margin-left: 10px;
+      display: block;
+    }
+
+    .group-items.collapsed {
+      display: none;
+    }
+
+    .menu-item {
+      display: block;
+      padding: 6px 10px;
+      margin-bottom: 4px;
+      text-decoration: none;
+      color: #333;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .menu-item:hover {
+      background: #e5e7eb;
+    }
+
+    .menu-item.active {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .preview {
+      flex: 1;
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    .arrow {
+      font-size: 10px;
+      transition: transform 0.2s;
+    }
+
+    .arrow.collapsed {
+      transform: rotate(-90deg);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="sidebar" id="sidebar">
+      <!-- 顶部标题 -->
+      <!-- <div class="sidebar-title">Lit Web Components</div> -->
+      <div class="sidebar-title">
+        <!-- logo 占位 -->
+        <!-- <div class="logo" style="background-image:url('logo.png')"></div> -->
+        <div class="title-text">Lit Web Components</div>
+      </div>
+    </div>
+    <iframe class="preview" id="previewFrame"></iframe>
+  </div>
+
+  <script type="module">
+    const pages = import.meta.glob('./pages/**/*.html');
+    const sidebar = document.getElementById('sidebar');
+    const previewFrame = document.getElementById('previewFrame');
+
+    const groups = {};
+    const rootItems = [];
+
+    Object.keys(pages).forEach((path) => {
+      const clean = path.replace('./pages/', '');
+      const parts = clean.split('/');
+      const pageName = parts[parts.length - 1].replace('.html', '');
+
+      if (parts.length === 1) {
+        rootItems.push({ name: pageName, path });
+      } else {
+        const group = parts[0];
+        if (!groups[group]) groups[group] = [];
+        groups[group].push({ name: pageName, path });
+      }
+    });
+
+    const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
+
+    function renderSidebar() {
+      // 清除旧菜单，保留顶部标题
+      sidebar.querySelectorAll('.menu-item, .group-title, .group-items').forEach(el => el.remove());
+
+      // 根目录页面
+      rootItems.forEach(item => {
+        const a = document.createElement('a');
+        a.className = 'menu-item';
+        a.dataset.page = item.path;
+        a.textContent = capitalize(item.name);
+        sidebar.appendChild(a);
+      });
+
+      // 分组页面
+      Object.entries(groups).forEach(([group, items]) => {
+        const groupTitle = document.createElement('div');
+        groupTitle.className = 'group-title';
+        groupTitle.innerHTML = `<span>${capitalize(group)}</span><span class="arrow">▶</span>`;
+        sidebar.appendChild(groupTitle);
+
+        const groupContainer = document.createElement('div');
+        groupContainer.className = 'group-items';
+        items.forEach(item => {
+          const a = document.createElement('a');
+          a.className = 'menu-item';
+          a.dataset.page = item.path;
+          a.textContent = capitalize(item.name);
+          groupContainer.appendChild(a);
+        });
+        sidebar.appendChild(groupContainer);
+
+        groupTitle.addEventListener('click', () => {
+          const arrow = groupTitle.querySelector('.arrow');
+          if (groupContainer.classList.contains('collapsed')) {
+            groupContainer.classList.remove('collapsed');
+            arrow.classList.remove('collapsed');
+          } else {
+            groupContainer.classList.add('collapsed');
+            arrow.classList.add('collapsed');
+          }
+        });
+      });
+    }
+
+    function loadPage(page) {
+      previewFrame.src = page;
+      document.querySelectorAll('.menu-item')
+        .forEach(a => a.classList.remove('active'));
+
+      const current = [...document.querySelectorAll('.menu-item')]
+        .find(a => a.dataset.page === page);
+
+      if (current) current.classList.add('active');
+
+      if (current) {
+        const parent = current.parentElement;
+        if (parent && parent.classList.contains('group-items') && parent.classList.contains('collapsed')) {
+          parent.classList.remove('collapsed');
+          const arrow = parent.previousElementSibling.querySelector('.arrow');
+          if (arrow) arrow.classList.remove('collapsed');
+        }
+      }
+    }
+
+    function bindEvents() {
+      document.querySelectorAll('.menu-item').forEach(a => {
+        a.addEventListener('click', e => {
+          e.preventDefault();
+          loadPage(a.dataset.page);
+        });
+      });
+    }
+
+    function init() {
+      renderSidebar();
+      bindEvents();
+      const first = document.querySelector('.menu-item');
+      if (first) loadPage(first.dataset.page);
+    }
+
+    init();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>Counter Demo</title>
+  <style>
+    .demo-title {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 15px;
+      color: #0056b3;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body style="padding: 20px; font-family: sans-serif;">
+  <h2 class="demo-title">计数器组件 (lit-counter)</h2>
+  <lit-counter label="默认计数器" count="0"></lit-counter>
+  <lit-counter label="自定义初始值" count="10"></lit-counter>
+  <lit-counter label="自定义初始值和步长" count="2" step="2"></lit-counter>
+  
+  <script type="module" src="../main.ts"></script>
+</body>
+
+</html>

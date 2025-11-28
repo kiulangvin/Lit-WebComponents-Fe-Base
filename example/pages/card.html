@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Card Demo</title>
+  <style>
+    .demo-title {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 15px;
+      color: #0056b3;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body style="padding: 20px; font-family: sans-serif;">
+  <h2 class="demo-title">卡片组件 (lit-card)</h2>
+  <lit-card title="示例卡片">
+    <p>这是一个带有标题的卡片组件示例。</p>
+    <lit-counter label="卡片内计数器" count="2"></lit-counter>
+  </lit-card>
+
+  <lit-card title="无边框卡片" shadow="false">
+    <p>这是一个没有阴影效果的卡片。</p>
+    <p>可以根据需要自定义样式。</p>
+  </lit-card>
+
+  <script type="module" src="../main.ts"></script>
+</body>
+
+</html>

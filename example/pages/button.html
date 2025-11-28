@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Button Demo</title>
+  <style>
+    .demo-title {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 15px;
+      color: #0056b3;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 10px;
+    }
+  </style>
+  <script type="module" src="../main.ts"></script>
+</head>
+
+<body style="padding: 20px; font-family: sans-serif;">
+  <h1>按钮组件 (lit-button)</h1>
+  <h2 class="demo-title">原生渲染</h2>
+  <lit-button type="primary">主要按钮</lit-button>
+  <lit-button type="success">成功按钮</lit-button>
+  <lit-button type="danger">危险按钮</lit-button>
+
+  <lit-button type="primary" disabled>禁用主要按钮</lit-button>
+
+
+  <h2 class="demo-title">vue渲染 </h2>
+  <div id="app"> </div>
+</body>
+
+</html>
+ <script type="module">
+    import { createApp, ref, h } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+    createApp({
+      setup() {
+        const count = ref(0);
+        // Vue 内部也可以使用 Web Component
+        const handleClick = () => {
+          alert('Vue 内部按钮点击');
+        }
+        return { count, handleClick };
+      },
+      render() {
+        return h('div', [
+          h('lit-button', { type: 'primary', onMyClick: this.handleClick , style:"margin-right:10px"}, 'vue渲染按钮'),
+          h('lit-button', { type: 'success', onMyClick: this.handleClick ,style:"margin-right:10px"}, 'vue渲染成功按钮'),
+          h('lit-button', { type: 'danger', onMyClick: this.handleClick ,style:"margin-right:10px"}, 'vue渲染危险按钮'),
+          h('div', { style:"margin-bottom:10px"}),
+          h('lit-button', { type: 'primary', size: 'small', onMyClick: this.handleClick ,style:"margin-right:10px"}, 'vue渲染小按钮'),
+          h('lit-button', { type: 'success', size: 'medium', onMyClick: this.handleClick ,style:"margin-right:10px"}, 'vue渲染中按钮'),
+          h('lit-button', { type: 'danger', size: 'large', onMyClick: this.handleClick ,style:"margin-right:10px"}, 'vue渲染大按钮'),
+          h('div', { style:"margin-bottom:10px"}),
+          h('lit-button', { type: 'primary', disabled: true, onMyClick: this.handleClick ,style:"margin-right:10px"}, 'vue渲染禁用主要按钮'),
+        ]);
+      }
+      // template: `<lit-button type="primary" @my-click="handleClick">Vue 内部 WC 按钮</lit-button>`
+    }).mount('#app');
+ </script>
