@@ -15,6 +15,7 @@
     }
   </style>
   <script type="module" src="../main.ts"></script>
+   
 </head>
 
 <body style="padding: 20px; font-family: sans-serif;">
@@ -25,7 +26,23 @@
   <lit-button type="danger">危险按钮</lit-button>
 
   <lit-button type="primary" disabled>禁用主要按钮</lit-button>
+ <div class="container">
+    <org-chart id="graph">123</org-chart>
+  </div>
+  <script>
+    const root = document.getElementById('graph');
+      const textFieldComponent = {
+        type: "OrgChart",
+        id: "tf-1",
+        properties: {
+          label: "Enter your name",
+          text: "John Doe",
+        },
+      };
 
+  // Root renders its *children*, so we must pass the component as a child.
+  root.childComponents = [textFieldComponent];
+  </script>
 
   <h2 class="demo-title">vue渲染 </h2>
   <div id="app"> </div>
